@@ -27,7 +27,7 @@ public class AuthResourceTest extends JerseyTest {
 	}
 
 	@Test
-	public void testTextXmlCliendId() {
+	public void testTextXmlClientId() {
 		WebResource webResource = resource();
 		ClientResponse response = webResource.path("auth").accept(MediaType.TEXT_XML).get(ClientResponse.class);
 		
@@ -36,7 +36,7 @@ public class AuthResourceTest extends JerseyTest {
 	}
 	
 	@Test
-	public void testApplicationXmlCliendId() {
+	public void testApplicationXmlClientId() {
 		WebResource webResource = resource();
 		ClientResponse response = webResource.path("auth").accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
 		
@@ -54,7 +54,7 @@ public class AuthResourceTest extends JerseyTest {
 	}
 	
 	@Test
-	public void testInvalidCliendId() {
+	public void testInvalidClientId() {
 		WebResource webResource = resource();
 		ClientResponse response = webResource.path("auth").accept(MediaType.APPLICATION_OCTET_STREAM).get(ClientResponse.class);
 		
