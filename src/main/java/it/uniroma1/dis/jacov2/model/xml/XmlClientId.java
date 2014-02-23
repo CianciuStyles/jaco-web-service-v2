@@ -1,4 +1,4 @@
-package it.uniroma1.dis.jacov2.model;
+package it.uniroma1.dis.jacov2.model.xml;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlValue;

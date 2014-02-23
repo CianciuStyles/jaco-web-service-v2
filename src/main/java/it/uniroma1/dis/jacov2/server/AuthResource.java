@@ -1,7 +1,7 @@
 package it.uniroma1.dis.jacov2.server;
 
-import it.uniroma1.dis.jacov2.model.JsonClientId;
-import it.uniroma1.dis.jacov2.model.XmlClientId;
+import it.uniroma1.dis.jacov2.model.json.JsonClientId;
+import it.uniroma1.dis.jacov2.model.xml.XmlClientId;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;

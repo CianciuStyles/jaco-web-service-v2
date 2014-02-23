@@ -40,6 +40,6 @@
 		<finalName>jacov2</finalName>
 	</build>
 	<properties>
-		<jersey-version>LATEST</jersey-version>
+		<jersey-version>1.8</jersey-version>
 	</properties>
 </project>
