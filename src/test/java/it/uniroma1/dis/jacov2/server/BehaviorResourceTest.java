@@ -35,6 +35,22 @@ public class BehaviorResourceTest extends JerseyTest {
 		System.out.println(response.getEntity(String.class));
 	}
 	
+	@Test
+	public void testGetNonAvailableXmlBehavior() {
+		WebResource resource = resource();
+		ClientResponse response = resource.path("testClientId").path("behaviors").path("absentBehavior").accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
+		
+		assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
+	}
+	
+	@Test
+	public void testGetNonAvailableJsonBehavior() {
+		WebResource resource = resource();
+		ClientResponse response = resource.path("testClientId").path("behaviors").path("absentBehavior").accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+		
+		assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
+	}
+	
 	/*
 	@Test
 	public void testGetXmlProblemFile() {
