@@ -1,17 +1,17 @@
-package it.uniroma1.dis.jacov2.model.xml;
+package it.uniroma1.dis.jacov2.model.json;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-@XmlRootElement(name = "behavior")
+@XmlRootElement
 @XmlType(propOrder = {"name", "domainFilePath", "problemFilePath"})
-public class XmlBehavior {
+public class JsonBehavior {
 	String name;
 	String domainFilePath;
 	String problemFilePath;
 	
-	public XmlBehavior() {}
+	public JsonBehavior() {}
 	
 	public void setName(String name) {
 		this.name = name;

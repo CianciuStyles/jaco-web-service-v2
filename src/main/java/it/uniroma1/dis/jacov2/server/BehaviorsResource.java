@@ -1,5 +1,6 @@
 package it.uniroma1.dis.jacov2.server;
 
+import it.uniroma1.dis.jacov2.model.json.JsonBehavior;
 import it.uniroma1.dis.jacov2.model.xml.XmlBehavior;
 
 import java.io.File;
@@ -39,6 +40,36 @@ public class BehaviorsResource {
 		
 		for (File behaviorDirectory : behaviorsDirectories) {
 			XmlBehavior behavior = new XmlBehavior();
+			behavior.setName(behaviorDirectory.getName());
+			File[] behaviorFiles = behaviorDirectory.listFiles();
+			
+			for (File behaviorFile : behaviorFiles) {
+				String behaviorFileName = behaviorFile.getName();
+				
+				if (behaviorFileName.endsWith("_domain.txt")) {
+					behavior.setDomainFilePath(behaviorFileName);
+				} else if (behaviorFileName.endsWith("_problem.txt")) {
+					behavior.setProblemFilePath(behaviorFileName);
+				}
+			}
+			
+			result.add(behavior);
+		}
+		
+		return result;
+	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<JsonBehavior> getJsonBehaviors(@PathParam("client_id") String clientId) {
+		List<JsonBehavior> result = new ArrayList<JsonBehavior>();
+		
+		File behaviorsRootPath = new File(rootPath + File.separator + clientId + File.separator + "Behaviors");
+		File[] behaviorsDirectories = behaviorsRootPath.listFiles();
+		
+		for (File behaviorDirectory : behaviorsDirectories) {
+			JsonBehavior behavior = new JsonBehavior();
+			behavior.setName(behaviorDirectory.getName());
 			File[] behaviorFiles = behaviorDirectory.listFiles();
 			
 			for (File behaviorFile : behaviorFiles) {
@@ -69,8 +100,8 @@ public class BehaviorsResource {
 	
 	@POST
 	public Response createNewBehavior(@PathParam("client_id") String clientId, @QueryParam("name") final String behaviorName) throws URISyntaxException {
-		BehaviorResource behaviorResource = new BehaviorResource(uriInfo, request, clientId);
-		return behaviorResource.createNewBehavior(behaviorName);
+		BehaviorResource behaviorResource = new BehaviorResource(uriInfo, request, clientId, behaviorName);
+		return behaviorResource.createNewBehavior();
 	}
 	
 	@DELETE
@@ -89,5 +120,10 @@ public class BehaviorsResource {
 		}
 		
 		return Response.ok().build();
+	}
+	
+	@Path("{behaviorName}")
+	public BehaviorResource getBehavior(@PathParam("client_id") String clientId, @PathParam("behaviorName") String behaviorName) {
+		return new BehaviorResource(uriInfo, request, clientId, behaviorName);
 	}
 }
