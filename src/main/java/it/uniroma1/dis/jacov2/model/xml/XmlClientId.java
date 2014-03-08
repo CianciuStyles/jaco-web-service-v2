@@ -10,7 +10,7 @@ public class XmlClientId {
 	
 	public XmlClientId(){}
 	
-	public XmlClientId(String clientId) {
+	public void setClientId(String clientId) {
 		this.clientId = clientId;
 	}
 }

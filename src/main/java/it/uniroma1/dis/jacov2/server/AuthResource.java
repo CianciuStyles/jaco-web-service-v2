@@ -25,23 +25,18 @@ public class AuthResource {
 	SessionIdentifierGenerator sig = new SessionIdentifierGenerator();
 	
 	@GET
-	@Produces(MediaType.TEXT_XML)
+	@Produces({MediaType.TEXT_XML, MediaType.APPLICATION_XML})
 	public XmlClientId getXmlClientIdBrowser() {
-		XmlClientId xmlClientId = new XmlClientId(sig.nextSessionId());
-		return xmlClientId;
-	}
-	
-	@GET
-	@Produces(MediaType.APPLICATION_XML)
-	public XmlClientId getXmlClientId() {
-		XmlClientId xmlClientId = new XmlClientId(sig.nextSessionId());
+		XmlClientId xmlClientId = new XmlClientId();
+		xmlClientId.setClientId(sig.nextSessionId());
 		return xmlClientId;
 	}
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public JsonClientId getJsonClientId() {
-		JsonClientId jsonClientId = new JsonClientId(sig.nextSessionId());
+		JsonClientId jsonClientId = new JsonClientId();
+		jsonClientId.setClientId(sig.nextSessionId());
 		return jsonClientId;
 	}
 	

@@ -10,7 +10,7 @@ public class JsonClientId {
 	
 	public JsonClientId() {}
 	
-	public JsonClientId(String clientId) {
+	public void setClientId(String clientId) {
 		this.clientId = clientId;
 	}
 }
