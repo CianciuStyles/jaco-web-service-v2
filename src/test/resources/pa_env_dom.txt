@@ -1,0 +1,33 @@
+(define (domain pa_env)
+(:requirements :strips)
+(:predicates
+			(unprocessed)
+			(isprepared)
+			(haswater)
+			(haspaint)	)
+			 
+(:action prepare
+:parameters ()
+:precondition (unprocessed)
+:effect (and (not (unprocessed)) (isprepared))	)
+			
+(:action paint
+:parameters ()
+:precondition (and (isprepared) (haspaint))
+:effect ()	)
+
+(:action clean
+:parameters () 
+:precondition (isprepared)
+:effect (oneof (not (haswater)) (haswater))  )
+
+(:action recharge
+:parameters ()
+:precondition ()
+:effect (and (haspaint) (haswater))	)
+		
+(:action dispose
+:parameters ()
+:precondition (isprepared)
+:effect (and (not (isprepared)) (unprocessed))	)
+)

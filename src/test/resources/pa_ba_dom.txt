@@ -1,0 +1,21 @@
+(define (domain pa_ba)
+(:requirements :strips)
+(:predicates
+			(free)	)
+			 
+
+(:action clean
+:parameters () 
+:precondition (free)
+:effect (not (free)) )
+
+(:action recharge
+:parameters ()
+:precondition ()
+:effect () )
+		
+(:action dispose
+:parameters ()
+:precondition ()
+:effect  (free)	)
+)

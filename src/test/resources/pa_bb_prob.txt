@@ -1,0 +1,15 @@
+(define (problem pa_bb_init)
+
+(:domain pa_bb)
+
+(:objects )
+
+(:init
+  (canprocess)
+  (not (hasprocessed))
+  (haspaint)
+  (not (nopaint)) )
+
+(:goal (TRUE))
+
+)

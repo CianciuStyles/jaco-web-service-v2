@@ -1,0 +1,15 @@
+(define (problem pa_env_init)
+
+(:domain pa_env)
+
+(:objects )
+
+(:init
+  (unprocessed)
+  (not (isprepared))
+  (haswater)
+  (haspaint))
+
+(:goal (TRUE))
+
+)

@@ -1,0 +1,22 @@
+(define (domain pa_bc)
+(:requirements :strips)
+(:predicates
+			(nopaint)
+			(haspaint)	)
+			 
+
+(:action prepare
+:parameters () 
+:precondition (haspaint)
+:effect () )
+
+(:action recharge
+:parameters ()
+:precondition (nopaint)
+:effect (and (haspaint) (not (nopaint))) )
+		
+(:action paint
+:parameters ()
+:precondition (haspaint)
+:effect  (and (nopaint) (not (haspaint))) )
+)

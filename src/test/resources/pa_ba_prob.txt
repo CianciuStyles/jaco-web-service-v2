@@ -1,0 +1,12 @@
+(define (problem pa_ba_init)
+
+(:domain pa_ba)
+
+(:objects )
+
+(:init
+  (free) )
+
+(:goal (TRUE))
+
+)

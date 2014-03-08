@@ -1,0 +1,13 @@
+(define (problem pa_bc_init)
+
+(:domain pa_bc)
+
+(:objects )
+
+(:init
+  (nopaint)
+  (not (haspaint)) )
+
+(:goal (TRUE))
+
+)

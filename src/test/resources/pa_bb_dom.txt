@@ -1,0 +1,27 @@
+(define (domain pa_bb)
+(:requirements :strips)
+(:predicates
+			(canprocess)	
+			(hasprocessed)
+			(nopaint)
+			(haspaint)	)
+			 
+(:action prepare
+:parameters ()
+:precondition (canprocess)
+:effect (and (not (canprocess)) (hasprocessed))	)
+			
+(:action paint
+:parameters ()
+:precondition (and (hasprocessed) (haspaint))
+:effect (and (canprocess) (not (hasprocessed)) (oneof (and (haspaint) (not(nopaint))) (and (not (haspaint)) (nopaint))))	)
+
+(:action clean
+:parameters () 
+:precondition (hasprocessed)
+:effect (and (not (hasprocessed)) (canprocess))  )
+
+(:action recharge
+:parameters ()
+:precondition (and (canprocess) (nopaint))
+:effect (and (haspaint) (not (nopaint)))	))

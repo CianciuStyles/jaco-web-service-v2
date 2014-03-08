@@ -1,0 +1,36 @@
+(define (domain pa_targ)
+(:requirements :strips)
+(:predicates
+			(unprocessed)
+			(isprepared)
+			(haswater)
+			(nopaint)
+			(haspaint)	)
+			 
+(:action prepare
+:parameters ()
+:precondition (and (unprocessed) (haspaint) (haswater))
+:effect (and (not (unprocessed)) (isprepared))	)
+			
+(:action paint
+:parameters ()
+:precondition (and (isprepared) (haspaint))
+:effect (and (not (haspaint)) (nopaint) (not (haswater)) )	)
+
+(:action clean
+:parameters () 
+:precondition (and (isprepared) (haswater))
+:effect (not (haswater)) )
+		
+(:action dispose
+:parameters ()
+:precondition (and (isprepared) (nopaint))
+:effect (and (not (isprepared)) (unprocessed))	)
+
+
+(:action recharge
+:parameters ()
+:precondition (and (nopaint) (unprocessed))
+:effect (and (haspaint) (haswater) (not (nopaint)))	)
+)
+

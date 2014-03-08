@@ -155,4 +155,9 @@ public class BehaviorResource {
 	public BehaviorDomainResource getDomain() {
 		return new BehaviorDomainResource(uriInfo, request, behaviorsRootPath, behaviorName);
 	}
+	
+	@Path("problem")
+	public BehaviorProblemResource getProblem() {
+		return new BehaviorProblemResource(uriInfo, request, behaviorsRootPath, behaviorName);
+	}
 }
