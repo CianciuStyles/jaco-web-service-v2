@@ -98,25 +98,25 @@ public class BehaviorDomainResourceTest extends JerseyTest {
 	}
 	
 	@Test
-	public void testPutProblemFile() throws URISyntaxException {
+	public void testPutDomainFile() throws URISyntaxException {
 		WebResource resource = resource();
 		
 		File behavior1DomainFile = new File(ClassLoader.getSystemResource("pa_ba_prob.txt").toURI());
 		FormDataMultiPart behavior1DomainForm = new FormDataMultiPart();
 		behavior1DomainForm.bodyPart(new FileDataBodyPart("file", behavior1DomainFile, MediaType.valueOf(MediaType.TEXT_PLAIN)));
-		ClientResponse response = resource.path("testClientId").path("behaviors").path("behavior1").path("problem").type(MediaType.MULTIPART_FORM_DATA_TYPE).put(ClientResponse.class, behavior1DomainForm);
+		ClientResponse response = resource.path("testClientId").path("behaviors").path("behavior1").path("domain").type(MediaType.MULTIPART_FORM_DATA_TYPE).put(ClientResponse.class, behavior1DomainForm);
 		
 		assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
 	}
 	
 	@Test
-	public void testPutProblemFileFailing() throws URISyntaxException {
+	public void testPutDomainFileFailing() throws URISyntaxException {
 		WebResource resource = resource();
 		
 		File behavior2DomainFile = new File(ClassLoader.getSystemResource("pa_bb_prob.txt").toURI());
 		FormDataMultiPart behavior2DomainForm = new FormDataMultiPart();
 		behavior2DomainForm.bodyPart(new FileDataBodyPart("file", behavior2DomainFile, MediaType.valueOf(MediaType.TEXT_PLAIN)));
-		ClientResponse response = resource.path("testClientId").path("behaviors").path("behavior2").path("problem").type(MediaType.MULTIPART_FORM_DATA_TYPE).put(ClientResponse.class, behavior2DomainForm);
+		ClientResponse response = resource.path("testClientId").path("behaviors").path("behavior2").path("domain").type(MediaType.MULTIPART_FORM_DATA_TYPE).put(ClientResponse.class, behavior2DomainForm);
 		
 		assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
 	}

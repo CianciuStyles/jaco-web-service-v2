@@ -92,7 +92,9 @@ public class BehaviorProblemResource {
 			return Response.created(directoryLocation).build();
 		} catch (FileNotFoundException ex) {
 			return Responses.notFound().build();
-		} catch (IOException | URISyntaxException e) {
+		} catch (IOException ex) {
+			return Response.serverError().build();
+		} catch (URISyntaxException e) {
 			return Response.serverError().build();
 		}
 	}

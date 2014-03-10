@@ -24,29 +24,27 @@ import com.sun.jersey.api.Responses;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
 
-public class BehaviorDomainResource {
+public class EnvironmentDomainResource {
 	@Context
 	UriInfo uriInfo;
 	@Context
 	Request request;
 	
-	String behaviorRootPath;
-	String behaviorName;
+	String environmentRootPath;
 
-	public BehaviorDomainResource(UriInfo uriInfo, Request request, String behaviorsRootPath, String behaviorName) {
+	public EnvironmentDomainResource(UriInfo uriInfo, Request request, String rootPath, String clientId) {
 		this.uriInfo = uriInfo;
 		this.request = request;
-		this.behaviorName = behaviorName;
-		this.behaviorRootPath = behaviorsRootPath + File.separator + behaviorName;			
+		this.environmentRootPath = rootPath + File.separator + clientId + File.separator + "environment";
 	}
 	
 	@GET
 	public Response getDomainFile() {
-		File[] behaviorFiles = new File(behaviorRootPath).listFiles();
+		File[] environmentFiles = new File(environmentRootPath).listFiles();
 				
-		for (File behaviorFile : behaviorFiles) {
-			if (behaviorFile.getName().endsWith("_domain.txt")) {
-				return Response.ok(behaviorFile, MediaType.valueOf(MediaType.TEXT_PLAIN)).build();
+		for (File environmentFile : environmentFiles) {
+			if (environmentFile.getName().endsWith("_domain.txt")) {
+				return Response.ok(environmentFile, MediaType.valueOf(MediaType.TEXT_PLAIN)).build();
 			}
 		}
 		
@@ -55,11 +53,11 @@ public class BehaviorDomainResource {
 	
 	@DELETE
 	public Response deleteDomainFile() {
-		File[] behaviorFiles = new File(behaviorRootPath).listFiles();
+		File[] environmentFiles = new File(environmentRootPath).listFiles();
 		
-		for (File behaviorFile : behaviorFiles) {
-			if (behaviorFile.getName().endsWith("_domain.txt")) {
-				boolean success = behaviorFile.delete();
+		for (File environmentFile : environmentFiles) {
+			if (environmentFile.getName().endsWith("_domain.txt")) {
+				boolean success = environmentFile.delete();
 				
 				if (success == true) {
 					return Response.ok().build();
@@ -76,7 +74,8 @@ public class BehaviorDomainResource {
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public Response postDomainFile(@FormDataParam("file") InputStream uploadedFile, @FormDataParam("file") FormDataContentDisposition fileDetail) {
 		try {
-			String fullName = behaviorRootPath + File.separator + behaviorName + "_domain.txt";
+			new File(environmentRootPath).mkdirs();
+			String fullName = environmentRootPath + File.separator + "env_domain.txt";
 			OutputStream fileWriter = new FileOutputStream(new File(fullName));
 
 			int read = 0;
@@ -88,7 +87,7 @@ public class BehaviorDomainResource {
 			fileWriter.flush();
 			fileWriter.close();
 			
-			URI directoryLocation = new URI(uriInfo.getAbsolutePath() + "/" + behaviorName + "_domain.txt");
+			URI directoryLocation = new URI(uriInfo.getAbsolutePath() + "/" + "env_domain.txt");
 			return Response.created(directoryLocation).build();
 		} catch (FileNotFoundException ex) {
 			return Response.serverError().build();
@@ -103,7 +102,7 @@ public class BehaviorDomainResource {
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public Response putDomainFile(@FormDataParam("file") InputStream uploadedFile, @FormDataParam("file") FormDataContentDisposition fileDetail) {
 		try {
-			String fullName = behaviorRootPath + File.separator + behaviorName + "_domain.txt";
+			String fullName = environmentRootPath + File.separator  + "env_domain.txt";
 			File domainFile = new File(fullName);
 			
 			if (domainFile.exists() == false) {
