@@ -24,27 +24,27 @@ import com.sun.jersey.api.Responses;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
 
-public class EnvironmentProblemResource {
+public class TargetProblemResource {
 	@Context
 	UriInfo uriInfo;
 	@Context
 	Request request;
 	
-	String environmentRootPath;
+	String targetRootPath;
 
-	public EnvironmentProblemResource(UriInfo uriInfo, Request request, String rootPath, String clientId) {
+	public TargetProblemResource(UriInfo uriInfo, Request request, String rootPath, String clientId) {
 		this.uriInfo = uriInfo;
 		this.request = request;
-		this.environmentRootPath = rootPath + File.separator + clientId + File.separator + "Environment";
+		this.targetRootPath = rootPath + File.separator + clientId + File.separator + "Target";
 	}
 	
 	@GET
 	public Response getProblemFile() {
-		File[] environmentFiles = new File(environmentRootPath).listFiles();
+		File[] targetFiles = new File(targetRootPath).listFiles();
 				
-		for (File environmentFile : environmentFiles) {
-			if (environmentFile.getName().endsWith("_problem.txt")) {
-				return Response.ok(environmentFile, MediaType.valueOf(MediaType.TEXT_PLAIN)).build();
+		for (File targetFile : targetFiles) {
+			if (targetFile.getName().endsWith("_problem.txt")) {
+				return Response.ok(targetFile, MediaType.valueOf(MediaType.TEXT_PLAIN)).build();
 			}
 		}
 		
@@ -53,11 +53,11 @@ public class EnvironmentProblemResource {
 	
 	@DELETE
 	public Response deleteProblemFile() {
-		File[] environmentFiles = new File(environmentRootPath).listFiles();
+		File[] targetFiles = new File(targetRootPath).listFiles();
 		
-		for (File environmentFile : environmentFiles) {
-			if (environmentFile.getName().endsWith("_problem.txt")) {
-				boolean success = environmentFile.delete();
+		for (File targetFile : targetFiles) {
+			if (targetFile.getName().endsWith("_problem.txt")) {
+				boolean success = targetFile.delete();
 				
 				if (success == true) {
 					return Response.ok().build();
@@ -74,8 +74,8 @@ public class EnvironmentProblemResource {
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public Response postProblemFile(@FormDataParam("file") InputStream uploadedFile, @FormDataParam("file") FormDataContentDisposition fileDetail) {
 		try {
-			new File(environmentRootPath).mkdirs();
-			String fullName = environmentRootPath + File.separator + "env_problem.txt";
+			new File(targetRootPath).mkdirs();
+			String fullName = targetRootPath + File.separator + "target_problem.txt";
 			OutputStream fileWriter = new FileOutputStream(new File(fullName));
 
 			int read = 0;
@@ -87,7 +87,7 @@ public class EnvironmentProblemResource {
 			fileWriter.flush();
 			fileWriter.close();
 			
-			URI directoryLocation = new URI(uriInfo.getAbsolutePath() + "/" + "env_problem.txt");
+			URI directoryLocation = new URI(uriInfo.getAbsolutePath() + "/" + "target_problem.txt");
 			return Response.created(directoryLocation).build();
 		} catch (FileNotFoundException ex) {
 			return Response.serverError().build();
@@ -102,7 +102,7 @@ public class EnvironmentProblemResource {
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public Response putProblemFile(@FormDataParam("file") InputStream uploadedFile, @FormDataParam("file") FormDataContentDisposition fileDetail) {
 		try {
-			String fullName = environmentRootPath + File.separator  + "env_problem.txt";
+			String fullName = targetRootPath + File.separator  + "target_problem.txt";
 			File problemFile = new File(fullName);
 			
 			if (problemFile.exists() == false) {

@@ -35,7 +35,7 @@ public class EnvironmentDomainResource {
 	public EnvironmentDomainResource(UriInfo uriInfo, Request request, String rootPath, String clientId) {
 		this.uriInfo = uriInfo;
 		this.request = request;
-		this.environmentRootPath = rootPath + File.separator + clientId + File.separator + "environment";
+		this.environmentRootPath = rootPath + File.separator + clientId + File.separator + "Environment";
 	}
 	
 	@GET
