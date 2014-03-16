@@ -19,6 +19,10 @@
 		<url-pattern>/api/*</url-pattern>
 	</servlet-mapping>
 
+	<listener>
+	    <listener-class>it.uniroma1.dis.jacov2.daemonthread.DaemonListener</listener-class>
+	</listener>
+	
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
