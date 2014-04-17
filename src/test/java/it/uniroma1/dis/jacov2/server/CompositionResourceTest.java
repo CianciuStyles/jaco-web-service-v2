@@ -33,10 +33,55 @@ public class CompositionResourceTest extends JerseyTest {
 		resource.path("testClientId").path("target").delete();
 		
 		// Upload all the behaviors
-		// Upload behavior1
-		// Upload behavior2
-		// Upload behavior3
 		
+		// Upload behavior1
+		// Create behavior1 via the POST request
+		resource.path("testClientId").path("behaviors").queryParam("name", "behavior1").post();
+		
+		// Upload behavior1 domain file
+		File behavior1DomainFile = new File(ClassLoader.getSystemResource("pa_ba_dom.txt").toURI());
+		FormDataMultiPart behavior1DomainForm = new FormDataMultiPart();
+		behavior1DomainForm.bodyPart(new FileDataBodyPart("file", behavior1DomainFile, MediaType.valueOf(MediaType.TEXT_PLAIN)));
+		resource.path("testClientId").path("behaviors").path("behavior1").path("domain").type(MediaType.MULTIPART_FORM_DATA_TYPE).post(behavior1DomainForm);
+		
+		// Upload behavior1 problem file
+		File behavior1ProblemFile = new File(ClassLoader.getSystemResource("pa_ba_prob.txt").toURI());
+		FormDataMultiPart behavior1ProblemForm = new FormDataMultiPart();
+		behavior1ProblemForm.bodyPart(new FileDataBodyPart("file", behavior1ProblemFile, MediaType.valueOf(MediaType.TEXT_PLAIN)));
+		resource.path("testClientId").path("behaviors").path("behavior1").path("problem").type(MediaType.MULTIPART_FORM_DATA_TYPE).post(behavior1ProblemForm);
+		
+		// Upload behavior2
+		// Create behavior2 via the POST request
+		resource.path("testClientId").path("behaviors").queryParam("name", "behavior2").post();
+		
+		// Upload behavior2 domain file
+		File behavior2DomainFile = new File(ClassLoader.getSystemResource("pa_bb_dom.txt").toURI());
+		FormDataMultiPart behavior2DomainForm = new FormDataMultiPart();
+		behavior2DomainForm.bodyPart(new FileDataBodyPart("file", behavior2DomainFile, MediaType.valueOf(MediaType.TEXT_PLAIN)));
+		resource.path("testClientId").path("behaviors").path("behavior2").path("domain").type(MediaType.MULTIPART_FORM_DATA_TYPE).post(behavior2DomainForm);
+		
+		// Upload behavior2 problem file
+		File behavior2ProblemFile = new File(ClassLoader.getSystemResource("pa_bb_prob.txt").toURI());
+		FormDataMultiPart behavior2ProblemForm = new FormDataMultiPart();
+		behavior2ProblemForm.bodyPart(new FileDataBodyPart("file", behavior2ProblemFile, MediaType.valueOf(MediaType.TEXT_PLAIN)));
+		resource.path("testClientId").path("behaviors").path("behavior2").path("problem").type(MediaType.MULTIPART_FORM_DATA_TYPE).post(behavior2ProblemForm);
+		
+		// Upload behavior3
+		// Create behavior3 via the POST request
+		resource.path("testClientId").path("behaviors").queryParam("name", "behavior3").post();
+		
+		// Upload behavior3 domain file
+		File behavior3DomainFile = new File(ClassLoader.getSystemResource("pa_bc_dom.txt").toURI());
+		FormDataMultiPart behavior3DomainForm = new FormDataMultiPart();
+		behavior3DomainForm.bodyPart(new FileDataBodyPart("file", behavior3DomainFile, MediaType.valueOf(MediaType.TEXT_PLAIN)));
+		resource.path("testClientId").path("behaviors").path("behavior3").path("domain").type(MediaType.MULTIPART_FORM_DATA_TYPE).post(behavior3DomainForm);
+		
+		// Upload behavior3 problem file
+		File behavior3ProblemFile = new File(ClassLoader.getSystemResource("pa_bc_prob.txt").toURI());
+		FormDataMultiPart behavior3ProblemForm = new FormDataMultiPart();
+		behavior3ProblemForm.bodyPart(new FileDataBodyPart("file", behavior3ProblemFile, MediaType.valueOf(MediaType.TEXT_PLAIN)));
+		resource.path("testClientId").path("behaviors").path("behavior3").path("problem").type(MediaType.MULTIPART_FORM_DATA_TYPE).post(behavior3ProblemForm);
+				
 		// Upload environment files
 		// Upload environment domain file
 		File environmentDomainFile = new File(ClassLoader.getSystemResource("pa_env_dom.txt").toURI());
