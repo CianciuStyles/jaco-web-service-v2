@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class XmlEnvironmentState {
 	@XmlElement(name = "term")
-	List<XmlTerm> terms;
+	public List<XmlTerm> terms;
 	
 	public XmlEnvironmentState() {
 		terms = new ArrayList<XmlTerm>();

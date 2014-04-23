@@ -2,6 +2,7 @@ package it.uniroma1.dis.jacov2.daemonthread;
 
 import it.uniroma1.dis.jacov2.composition.Composition;
 import it.uniroma1.dis.jacov2.dao.JobsQueue;
+import it.uniroma1.dis.jacov2.model.json.JsonComposition;
 import it.uniroma1.dis.jacov2.model.xml.XmlBehaviorState;
 import it.uniroma1.dis.jacov2.model.xml.XmlComposition;
 import it.uniroma1.dis.jacov2.model.xml.XmlCompositionState;
@@ -14,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -29,6 +31,10 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
+import com.sun.jersey.api.json.JSONConfiguration;
+import com.sun.jersey.api.json.JSONJAXBContext;
+import com.sun.jersey.api.json.JSONMarshaller;
+
 public class DaemonThread extends Thread {
 
 	BlockingQueue<String> jobsQueue = JobsQueue.instance.getModel();
@@ -38,7 +44,6 @@ public class DaemonThread extends Thread {
 		while (true) {
 			try {
 				if (jobsQueue.isEmpty()) {
-					//System.out.println("DaemonThread going to sleep...");
 					Thread.sleep(500);
 				} else {
 					String nextJobId = jobsQueue.peek();
@@ -52,7 +57,10 @@ public class DaemonThread extends Thread {
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 			} catch (IOException e) {
-				Thread.currentThread().interrupt();
+				//Thread.currentThread().interrupt();
+				
+				// Cancel the current job and carry on with the next one
+				jobsQueue.remove();
 			}
 		}
 	}
@@ -151,32 +159,9 @@ public class DaemonThread extends Thread {
 		String compositionPath = rootPath + File.separator + jobId + File.separator + "Composition";
 		String compositionSmvFilePath = compositionPath + File.separator + "Composition.smv";
 		String compositionTxtFilePath = compositionPath + File.separator + "Composition.txt";
-		
-		// Read from SMV file the names of the behaviors
-		/*
-		List<String> behaviorsNames = new LinkedList<String>();
-		behaviorsNames.add("Target");
+		String compositionXmlFilePath = compositionPath + File.separator + "Composition.xml";
+		String compositionJsonFilePath = compositionPath + File.separator + "Composition.json";
 
-		try {
-			BufferedReader br = new BufferedReader(new InputStreamReader(new DataInputStream(new FileInputStream(compositionSmvFilePath))));
-			
-			String fileLine;
-			Pattern behaviorNamePattern = Pattern.compile("^\\s+(s\\d+) : (\\w+)\\(index, operation\\)");
-
-			while ((fileLine = br.readLine()) != null) {
-				Matcher matcher = behaviorNamePattern.matcher(fileLine);
-				while (matcher.find()) {
-					System.out.println(matcher.group(2));
-					behaviorsNames.add(matcher.group(2));
-				}
-			}
-
-			br.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		*/
-		
 		// Read the SMV file to retrieve services names and number of variables
 		ArrayList[] res = ParseSmvFile(compositionSmvFilePath);
 		
@@ -190,92 +175,14 @@ public class DaemonThread extends Thread {
 			e.printStackTrace();
 		}
 		
-		// Read states from Composition.txt file and populate the XML file
-		/*
-		HashMap<String, XmlTargetState> targetStates = new HashMap<String, XmlTargetState>();
-		try {
-			BufferedReader br = new BufferedReader(new InputStreamReader(new DataInputStream(new FileInputStream(compositionTxtFilePath))));
-			String fileLine;
-			Pattern stateDescriptionPattern = Pattern.compile("State (\\d*) : State\\s*-> <operation:(\\w*), state:(\\w+), ([state:[\\w]*, ]*)index:(\\d*)>");
-			Pattern stateNamePattern = Pattern.compile("state:(\\w*),");
-
-			while ((fileLine = br.readLine()) != null) {
-				Matcher matcher = stateDescriptionPattern.matcher(fileLine);
-				while (matcher.find()) {
-					if (matcher.group(3).equals("start_st"))
-						continue;
-
-					XmlTargetState ts;
-					if (targetStates.containsKey(matcher.group(3)))
-						ts = targetStates.get(matcher.group(3));
-					else {
-						ts = new XmlTargetState(matcher.group(3));
-						targetStates.put(matcher.group(3), ts);
-					}
-
-					System.out.println("Target state: " + matcher.group(3));
-
-					System.out.println("Available behaviors: ");
-					XmlCommunityState cs = new XmlCommunityState();
-					String[] stateDescriptions = matcher.group(4).split("\\s");
-					for (int i = 0; i < stateDescriptions.length; i++) {
-						String desc = stateDescriptions[i];
-						Matcher mat = stateNamePattern.matcher(desc);
-						while (mat.find()) {
-							System.out.println("  " + behaviorsNames.get(i + 1)	+ ": " + mat.group(1));
-							cs.addBehaviorState(behaviorsNames.get(i + 1), mat.group(1));
-						}
-					}
-
-					XmlPossibleState ps = ts.contains(cs);
-					if (ps == null)
-						ps = new XmlPossibleState(cs);
-
-
-					System.out.println("Next action: " + matcher.group(2));
-					int index = Integer.parseInt(matcher.group(5));
-					System.out.println("Next NPC to be invoked: " + behaviorsNames.get(index));
-					System.out.println("=======================================");
-
-					XmlTargetTransition tt = new XmlTargetTransition(behaviorsNames.get(index), matcher.group(2));
-					ps.addTransition(tt);
-
-					ts.addPossibleState(ps);
-				}
-			}
-			
-			System.out.println(targetStates.size() + " states found.");
-
-			for (XmlTargetState ts : targetStates.values())
-				computedComposition.addTargetState(ts);
-
-			br.close();
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		*/
-		
 		// Read the Composition TXT file to build the XML structure
 		computedComposition = ParseTxtFile(compositionTxtFilePath, res, computedComposition);
 		
 		// Write Composition to XML file
 		try {
-			File compositionXmlFile = new File(compositionPath + File.separator + "Composition.xml");
-
-			synchronized (compositionXmlFile) {
-				new File(compositionPath).mkdirs();
-				compositionXmlFile.createNewFile();
-
-				JAXBContext jaxbContext = JAXBContext.newInstance(XmlComposition.class);
-				Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-				jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-				jaxbMarshaller.marshal(computedComposition, compositionXmlFile);
-			}
+			WriteCompositionToXmlAndJson(computedComposition, compositionPath, compositionXmlFilePath, compositionJsonFilePath);
 		} catch (JAXBException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
-			throw new WebApplicationException(500);
 		}
 	}
 	
@@ -377,8 +284,6 @@ public class DaemonThread extends Thread {
 				behaviorStates = new ArrayList<XmlBehaviorState>();
 				for (String service : behaviorNames)
 				{
-					//System.out.println("Service: " + service);
-
 					switch (service) {
 						case "Env":
 							envState = new XmlEnvironmentState();
@@ -441,5 +346,32 @@ public class DaemonThread extends Thread {
 		System.out.println(composition.compositionStates.size() + " states found.");
 		TxtFileReader.close();
 		return composition;
+	}
+	
+	private void WriteCompositionToXmlAndJson(XmlComposition composition, String compositionPath, String compositionXmlFilePath, String compositionJsonFilePath) throws IOException, JAXBException {
+		new File(compositionPath).mkdirs();
+		
+		// Write the XML file
+		File compositionXmlFile = new File(compositionXmlFilePath);
+		synchronized (compositionXmlFile) {
+			compositionXmlFile.createNewFile();
+
+			JAXBContext jaxbContext = JAXBContext.newInstance(XmlComposition.class);
+			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			jaxbMarshaller.marshal(composition, compositionXmlFile);
+		}
+		
+		// Write the JSON file
+		JsonComposition jsonComposition = new JsonComposition(composition);
+		File compositionJsonFile = new File(compositionJsonFilePath);
+		synchronized (compositionJsonFile) {
+			compositionJsonFile.createNewFile();
+
+			JSONJAXBContext jaxbContext = new JSONJAXBContext(JSONConfiguration.natural().humanReadableFormatting(true).build(), JsonComposition.class);
+			JSONMarshaller jsonMarshaller = jaxbContext.createJSONMarshaller();
+			jsonMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			jsonMarshaller.marshallToJSON(jsonComposition, new FileOutputStream(compositionJsonFile));
+		}
 	}
 }

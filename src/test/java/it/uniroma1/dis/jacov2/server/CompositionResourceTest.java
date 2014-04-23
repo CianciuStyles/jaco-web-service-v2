@@ -22,7 +22,7 @@ public class CompositionResourceTest extends JerseyTest {
 	public CompositionResourceTest() throws Exception {
 		super("it.uniroma1.dis.jacov2.server");
 	}
-	
+
 	@Before
 	public void prepareServerForTests() throws URISyntaxException {
 		WebResource resource = resource();
@@ -116,11 +116,24 @@ public class CompositionResourceTest extends JerseyTest {
 		
 		assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
 	}
-
-	/*
+	
 	@Test
-	public void testGetComposition() {
-		fail("Not yet implemented");
+	public void testGetXmlComposition() {
+		WebResource resource = resource();
+		ClientResponse response = resource.path("testClientId").path("composition").accept(MediaType.TEXT_XML).get(ClientResponse.class);
+		
+		assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+		assertEquals(MediaType.TEXT_XML, response.getType().toString());
+		System.out.println(response.getEntity(String.class));
 	}
-	*/
+	
+	@Test
+	public void testGetJsonComposition() {
+		WebResource resource = resource();
+		ClientResponse response = resource.path("testClientId").path("composition").accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+		
+		assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+		assertEquals(MediaType.APPLICATION_JSON, response.getType().toString());
+		System.out.println(response.getEntity(String.class));
+	}
 }

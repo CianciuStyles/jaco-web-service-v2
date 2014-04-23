@@ -10,9 +10,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class XmlBehaviorState {
 	@XmlAttribute(name = "name")
-	String behaviorName;
+	public String behaviorName;
 	@XmlElement(name = "term")
-	List<XmlTerm> terms;
+	public List<XmlTerm> terms;
 	
 	public XmlBehaviorState() {
 		this.terms = new ArrayList<XmlTerm>();

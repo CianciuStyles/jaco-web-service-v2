@@ -18,7 +18,7 @@ public class XmlCompositionState {
 	public List<XmlBehaviorState> behaviorStates;
 	@XmlElementWrapper(name = "transitions")
 	@XmlElement(name = "transition")
-	List<XmlTransition> transitions;
+	public List<XmlTransition> transitions;
 	
 	public XmlCompositionState() {
 		this.targetState = null;

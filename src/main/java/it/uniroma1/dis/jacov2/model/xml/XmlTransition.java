@@ -6,9 +6,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "transition")
 public class XmlTransition {
 	@XmlAttribute
-	String behavior;
+	public String behavior;
 	@XmlAttribute
-	String action;
+	public String action;
 	
 	public XmlTransition() {}
 	

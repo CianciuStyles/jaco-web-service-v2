@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "composition")
 public class XmlComposition {
 	@XmlElement
-	boolean isRealizable;
+	public boolean isRealizable;
 	@XmlElement(name = "compositionState")
 	public List<XmlCompositionState> compositionStates;
 

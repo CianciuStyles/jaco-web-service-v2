@@ -6,9 +6,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "term")
 public class XmlTerm {
 	@XmlAttribute
-	String name;
+	public String name;
 	@XmlAttribute
-	String value;
+	public String value;
 	
 	public XmlTerm() {}
 	
