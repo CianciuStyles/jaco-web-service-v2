@@ -14,25 +14,38 @@ import org.antlr.v4.runtime.tree.*;
  * @version 0.1
  */
 public class pddl2smv {
-	public static void main(String outFilePath, String[] args) throws Exception {		
+	public static void main(String outFilePath, String[] args, String[] behaviorNames) throws Exception {		
 		if (args.length < 2) {
 			System.out.println("Too few arguments, use: pddl2smv <env domain file>" +
 					" <env problem file> <target domain file> <target problem file> " +
 					"<s1 domain file> <s1 problem file>...");
 			return;
 		}
-		//outFile = "out.smv"; // default output file
+		
 		outFile = outFilePath;
 		
 		int n_agents = (args.length)/2;
-		System.out.println("Agents " + n_agents +'\n');
+		System.out.println("Number of agents " + n_agents);
 		
 		smvWriter mysmv = new smvWriter(outFile);
 		
 		//ArrayList<pddl2smvListener> listarr = new ArrayList<pddl2smvListener>();
 		
 		for (int kk=0; kk < n_agents; kk=kk+1) {
-			System.out.println("Started processing agent " + kk +'\n');
+			String currentAgent = null;
+			switch (kk) {
+				case 0:
+					currentAgent = "Environment";
+					break;
+				case 1:
+					currentAgent = "Target";
+					break;
+				default:
+					currentAgent = behaviorNames[kk-2];
+					break;
+			}
+			
+			System.out.println("Started processing agent " + currentAgent);
 			int ag_ind = kk*2;
 			/**
 			 * Prepare domain file for input
@@ -63,20 +76,20 @@ public class pddl2smv {
 			walker.walk(mylist, treeProb);
 			
 			//listarr.add(mylist);
-			System.out.println("Finished processing agent " + kk +'\n');
+			System.out.println("Finished processing agent " + currentAgent);
 			
 			/**
 			 * At this point all information to write the SMV module must be available.
 			 * The output file is generated.
 			 */
 			if (kk==0) {
-				mysmv.writeSMVStart(mylist, n_agents);
+				mysmv.writeSMVStart(mylist, n_agents, behaviorNames);
 				mysmv.writeSMV(mylist,"ServEnv");
 			} else {
 				if (kk==1) {
 					mysmv.writeSMVTarget(mylist,"Target");
 				} else {
-					mysmv.writeSMVServ(mylist, kk-1);
+					mysmv.writeSMVServ(mylist, kk-1, currentAgent);
 				}
 			}
 		}

@@ -35,7 +35,7 @@ public class smvWriter {
 	public void close() {
 		fwr.close();
 	}
-	public boolean writeSMVStart(pddl2smvListener mylist, int n_agents) throws IOException {
+	public boolean writeSMVStart(pddl2smvListener mylist, int n_agents, String[] behaviorNames) throws IOException {
 		fwr = new PrintWriter(outwr,false);
 		StringBuilder txt = new StringBuilder();
 		txt.append("MODULE main\n");
@@ -68,7 +68,7 @@ public class smvWriter {
 		txt.append("  senv : ServEnv(operation);\n");
 		txt.append("  target : Target(operation);\n");
 		for (int kk=1;kk<=n_agents-2;kk=kk+1) {
-			txt.append("  s" + kk + " : Service" + kk + "(index,operation);\n");
+			txt.append("  s" + kk + " : " + behaviorNames[kk-1] + "(index,operation);\n");
 		}
 		
 		txt.append("DEFINE\n");
@@ -158,12 +158,11 @@ public class smvWriter {
 	}
 	
 	
-	public boolean writeSMVServ(pddl2smvListener mylist, int modind) throws IOException {
+	public boolean writeSMVServ(pddl2smvListener mylist, int modind, String behaviorName) throws IOException {
 
 		StringBuilder outtxtb = new StringBuilder();
 		
-		String modname = "Service" + modind;
-		mylist.getHeaderText(outtxtb,modname,true);
+		mylist.getHeaderText(outtxtb,behaviorName,true);
 		
 		mylist.getPredicatesText(outtxtb);
 		writeToFile(outtxtb.toString());

@@ -25,7 +25,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -68,6 +67,7 @@ public class DaemonThread extends Thread {
 	private Response prepareFilesForComposition(String jobId) {
 		String clientRootPath = rootPath + File.separator + jobId;
 		List<String> pddl2smvArgs = new ArrayList<String>();
+		List<String> behaviorNames = new ArrayList<String>();
 		
 		// Check environment files
 		List<String> environmentArgs = new ArrayList<String>(2);
@@ -129,6 +129,7 @@ public class DaemonThread extends Thread {
 					}
 					
 					behaviorsArgs.addAll(behaviorArgs);
+					behaviorNames.add(behaviorDirectory.getName());
 				}
 			}
 		}
@@ -139,8 +140,12 @@ public class DaemonThread extends Thread {
 		
 		try {
 			String[] pddl2svmArgsArray = new String[pddl2smvArgs.size()];
+			String[] pddl2svmNamesArray = new String[behaviorNames.size()];
 			pddl2smvArgs.toArray(pddl2svmArgsArray);
-			pddl2smv.main(compositionDirectory + File.separator + "Composition.smv", pddl2svmArgsArray);
+			behaviorNames.toArray(pddl2svmNamesArray);
+			
+			System.out.println("=============================");
+			pddl2smv.main(compositionDirectory + File.separator + "Composition.smv", pddl2svmArgsArray, pddl2svmNamesArray);
 			
 			return Response.ok().build();
 		} catch (Exception e) {
@@ -155,6 +160,7 @@ public class DaemonThread extends Thread {
 		composition.doComposition();
 	}
 	
+	@SuppressWarnings("rawtypes")
 	private void convertCompositionToXML(String jobId) throws IOException {
 		String compositionPath = rootPath + File.separator + jobId + File.separator + "Composition";
 		String compositionSmvFilePath = compositionPath + File.separator + "Composition.smv";
