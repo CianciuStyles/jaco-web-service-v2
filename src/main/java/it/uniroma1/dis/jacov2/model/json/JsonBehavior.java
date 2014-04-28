@@ -17,7 +17,6 @@ public class JsonBehavior {
 		this.name = name;
 	}
 	
-	@XmlElement(name = "name")
 	public String getName() {
 		return this.name;
 	}
@@ -25,7 +24,7 @@ public class JsonBehavior {
 	public void setDomainFilePath(String domainFilePath) {
 		this.domainFilePath = domainFilePath;
 	}
-	
+
 	@XmlElement(name = "domainFile")
 	public String getDomainFilePath() {
 		return this.domainFilePath;
@@ -34,7 +33,7 @@ public class JsonBehavior {
 	public void setProblemFilePath(String problemFilePath) {
 		this.problemFilePath = problemFilePath;
 	}
-	
+
 	@XmlElement(name = "problemFile")
 	public String getProblemFilePath() {
 		return this.problemFilePath;

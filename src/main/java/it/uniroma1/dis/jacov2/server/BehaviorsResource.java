@@ -1,12 +1,12 @@
 package it.uniroma1.dis.jacov2.server;
 
 import it.uniroma1.dis.jacov2.model.json.JsonBehavior;
+import it.uniroma1.dis.jacov2.model.json.JsonBehaviors;
 import it.uniroma1.dis.jacov2.model.xml.XmlBehavior;
+import it.uniroma1.dis.jacov2.model.xml.XmlBehaviors;
 
 import java.io.File;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -32,8 +32,8 @@ public class BehaviorsResource {
 	
 	@GET
 	@Produces({MediaType.TEXT_XML, MediaType.APPLICATION_XML})
-	public List<XmlBehavior> getXmlBehaviors(@PathParam("client_id") String clientId) {
-		List<XmlBehavior> result = new ArrayList<XmlBehavior>();
+	public XmlBehaviors getXmlBehaviors(@PathParam("client_id") String clientId) {
+		XmlBehaviors result = new XmlBehaviors();
 		
 		File behaviorsRootPath = new File(rootPath + File.separator + clientId + File.separator + "Behaviors");
 		File[] behaviorsDirectories = behaviorsRootPath.listFiles();
@@ -61,8 +61,8 @@ public class BehaviorsResource {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<JsonBehavior> getJsonBehaviors(@PathParam("client_id") String clientId) {
-		List<JsonBehavior> result = new ArrayList<JsonBehavior>();
+	public JsonBehaviors getJsonBehaviors(@PathParam("client_id") String clientId) {
+		JsonBehaviors result = new JsonBehaviors();
 		
 		File behaviorsRootPath = new File(rootPath + File.separator + clientId + File.separator + "Behaviors");
 		File[] behaviorsDirectories = behaviorsRootPath.listFiles();
