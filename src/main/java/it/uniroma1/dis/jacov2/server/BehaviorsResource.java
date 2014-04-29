@@ -37,6 +37,8 @@ public class BehaviorsResource {
 		
 		File behaviorsRootPath = new File(rootPath + File.separator + clientId + File.separator + "Behaviors");
 		File[] behaviorsDirectories = behaviorsRootPath.listFiles();
+		if (behaviorsDirectories == null)
+			return result;
 		
 		for (File behaviorDirectory : behaviorsDirectories) {
 			XmlBehavior behavior = new XmlBehavior();
@@ -66,6 +68,8 @@ public class BehaviorsResource {
 		
 		File behaviorsRootPath = new File(rootPath + File.separator + clientId + File.separator + "Behaviors");
 		File[] behaviorsDirectories = behaviorsRootPath.listFiles();
+		if (behaviorsDirectories == null)
+			return result;
 		
 		for (File behaviorDirectory : behaviorsDirectories) {
 			JsonBehavior behavior = new JsonBehavior();
