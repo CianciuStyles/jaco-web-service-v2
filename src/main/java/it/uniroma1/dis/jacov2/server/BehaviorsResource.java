@@ -112,9 +112,13 @@ public class BehaviorsResource {
 	public Response clearBehaviors(@PathParam("client_id") String clientId) {
 		File behaviorsRootPath = new File(rootPath + File.separator + clientId + File.separator + "Behaviors");
 		File[] behaviorsDirectories = behaviorsRootPath.listFiles();
+		if (behaviorsDirectories == null)
+			return Response.ok().build();
 		
 		for (File behaviorDirectory : behaviorsDirectories) {
 			File[] behaviorFiles = behaviorDirectory.listFiles();
+			if (behaviorFiles == null)
+				continue;
 			
 			for (File behaviorFile : behaviorFiles) {
 				behaviorFile.delete();
